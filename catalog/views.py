@@ -18,12 +18,19 @@ def index(request):
 
     num_genres = Genre.objects.all().count()
 
+     # Number of visits to this view, as counted in the session variable.
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
+
+
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
         'num_genres' : num_genres,
+        'num_visits': num_visits,
     }
 
     # Render the HTML template index.html with the data in the context variable
@@ -33,14 +40,14 @@ from django.views import generic
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by = 2 #prikazuje max 10 stavki po stranici 
+    paginate_by = 20 #prikazuje max 20 stavki po stranici 
 
 class BookDetailView(generic.DetailView):
     model = Book
 
 class AuthorListView(generic.ListView):
     model = Author
-    paginate_by = 10
+    paginate_by = 20
 
 class AuthorDetailView(generic.DetailView):
     model = Author
